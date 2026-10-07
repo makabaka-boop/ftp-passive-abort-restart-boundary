@@ -1,0 +1,12 @@
+{
+  "name": "readonly-ftpd",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Single-process read-only FTP demo server (USER/PASS/TYPE I/EPSV/REST/RETR/ABOR/NOOP/QUIT)",
+  "main": "ftpd.js",
+  "scripts": {
+    "start": "node ftpd.js",
+    "test": "node --test test/"
+  },
+  "license": "MIT"
+}
