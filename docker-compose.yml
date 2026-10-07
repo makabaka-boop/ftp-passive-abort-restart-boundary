@@ -1,0 +1,22 @@
+services:
+  readonly-ftp:
+    build: .
+    image: readonly-ftp-demo:latest
+    restart: unless-stopped
+    ports:
+      - "2121:2121"
+      # Fixed passive range advertised by EPSV; each EPSV replaces the
+      # previous listener and each RETR consumes one listener exclusively.
+      - "21100-21120:21100-21120"
+    environment:
+      FTP_HOST: "0.0.0.0"
+      FTP_PORT: "2121"
+      FTP_PASSIVE_PORTS: "21100-21120"
+      FTP_ACCEPT_TIMEOUT: "10"
+    healthcheck:
+      # Real control-connection probe: greeting is the only thing a read-only
+      # server sends without authentication.
+      test: ["CMD", "python3", "-c", "import socket,sys; s=socket.create_connection(('127.0.0.1',2121),3); sys.exit(0 if s.recv(64).startswith(b'220') else 1)"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
